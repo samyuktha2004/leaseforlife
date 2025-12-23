@@ -1,5 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
-import { api } from "@shared/routes";
+import { useState, useMemo } from "react";
 
 export type Level = number;
 
@@ -13,44 +12,38 @@ interface GameState {
 }
 
 export function useGameState() {
-  // Start at Level 1
   const [level, setLevel] = useState<Level>(1);
 
   const gameState = useMemo<GameState>(() => {
-    // Level 1-4: Xylax in Apartment
     if (level <= 4) {
       return {
         level,
-        persona: "Xylax the Alien Landlord",
-        objective: "Audit the tenant's living compliance.",
-        hook: "The rent is late and the gravity stabilizer is broken.",
-        characterImage: "/assets/xylax.jpg",
-        backgroundImage: "/assets/apartment_path.jpg",
+        persona: "Xylax the Landlord Audit",
+        objective: `Level ${level}: Inspect the kitchen facilities. Standards must be maintained.`,
+        hook: "The blueprints are filed. Don't smudge the assets. I expect operational perfection.",
+        characterImage: "/assets/xylax.png",
+        backgroundImage: "/assets/kitchen_bg.png",
       };
-    } 
-    // Level 5+: Toaster in Kitchen
-    else {
+    } else {
       return {
         level,
-        persona: "Sentient Toaster",
-        objective: "Convince the human to make perfect toast.",
-        hook: "I require bread to fulfill my destiny.",
-        characterImage: "/assets/toaster.jpg",
-        backgroundImage: "/assets/kitchen_bg.jpg",
+        persona: "Sentient Toaster Unit T-045",
+        objective: "Level 5: Bread awaits inspection. Warm up to your new role.",
+        hook: "I've been waiting for this moment. Let's get toasty.",
+        characterImage: "/assets/toaster.png",
+        backgroundImage: "/assets/kitchen_bg.png",
       };
     }
   }, [level]);
 
-  // Handler for the 'complete_level' tool call
   const completeLevel = async (targetLevel: number) => {
     console.log(`Level Complete! Transitioning to level ${targetLevel}`);
-    // Artificial delay for dramatic effect if needed, but instant is snappier
     setLevel(targetLevel);
   };
 
   return {
     ...gameState,
     completeLevel,
-    setLevel // Exposed for debug/testing
+    setLevel
   };
 }
