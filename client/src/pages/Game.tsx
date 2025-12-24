@@ -63,13 +63,23 @@ export default function Game() {
 
   const handleStart = useCallback(async () => {
     try {
+      const agentId = import.meta.env.VITE_ELEVENLABS_AGENT_ID;
+      
+      if (!agentId) {
+        toast({
+          title: "Configuration Error",
+          description: "ElevenLabs Agent ID not configured. Please set VITE_ELEVENLABS_AGENT_ID.",
+          variant: "destructive"
+        });
+        return;
+      }
+
       // IMPORTANT: Request microphone permission first
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
       // Start the conversation with dynamic variables
       await conversation.startSession({
-        // Replace this with your actual Agent ID
-        agentId: "YOUR_ELEVENLABS_AGENT_ID", 
+        agentId,
         dynamicVariables: {
           persona,
           objective,
